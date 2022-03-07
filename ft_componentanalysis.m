@@ -13,7 +13,7 @@ function [comp] = ft_componentanalysis(cfg, data)
 %
 % The configuration should contain
 %   cfg.method       = 'runica', 'fastica', 'binica', 'pca', 'svd', 'jader',
-%                      'varimax', 'dss', 'cca', 'sobi', 'white' or 'csp' 
+%                      'varimax', 'dss', 'cca', 'sobi', 'sobiro', 'white' or 'csp' 
 %                      (default = 'runica')
 %   cfg.channel      = cell-array with channel selection (default = 'all'),
 %                      see FT_CHANNELSELECTION for details
@@ -102,6 +102,11 @@ function [comp] = ft_componentanalysis(cfg, data)
 %   cfg.sobi.n_sources
 %   cfg.sobi.p_correlations
 %
+% The sobiro method supports the following method-specific options. The 
+% values that these options can take can be found with HELP SOBIRO.
+%   cfg.sobiro.n_sources
+%   cfg.sobiro.p_correlations
+%
 % The csp method implements the common-spatial patterns method. For CSP, the
 % following specific options can be defined:
 %   cfg.csp.classlabels = vector that assigns a trial to class 1 or 2.
@@ -134,7 +139,7 @@ function [comp] = ft_componentanalysis(cfg, data)
 % input/output structure.
 %
 % See also FT_TOPOPLOTIC, FT_REJECTCOMPONENT, FASTICA, RUNICA, BINICA, SVD,
-% JADER, VARIMAX, DSS, CCA, SOBI, ICASSO
+% JADER, VARIMAX, DSS, CCA, SOBI, SOBIRO, ICASSO
 
 % Copyright (C) 2003-2012, Robert Oostenveld
 %
@@ -368,7 +373,7 @@ else
   ft_info('no scaling applied to the data\n');
 end
 
-if strcmp(cfg.method, 'sobi')
+if or(strcmp(cfg.method, 'sobi'), strcmp(cfg.method, 'sobiro'))
   
   % concatenate all the data into a 3D matrix respectively 2D (sobi)
   ft_info('concatenating data');
@@ -764,7 +769,25 @@ switch cfg.method
     end
     
     unmixing = [];
+
+  case 'sobiro'
+    % check whether the required low-level toolboxes are installed
+    % see http://www.sccn.ucsd.edu/eeglab
+    ft_hastoolbox('eeglab', 1);
     
+    % check for additional options, see SOBI for details
+    if ~isfield(cfg, 'sobiro')
+      mixing = sobiro(dat, cfg.numcomponent);
+    elseif isfield(cfg.sobiro, 'n_sources') && isfield(cfg.sobiro, 'p_correlations')
+      mixing = sobiro(dat, cfg.sobiro.n_sources, cfg.sobiro.p_correlations);
+    elseif isfield(cfg.sobiro, 'n_sources')
+      mixing = sobiro(dat,cfg.sobiro.n_sources);
+    else
+      ft_error('unknown options for SOBIRO component analysis');
+    end
+    
+    unmixing = [];
+
   case 'predetermined unmixing matrix'
     % check which labels from the cfg are identical to those of the data
     % this gives us the rows of cfg.topo (the channels) and of
