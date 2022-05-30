@@ -1,7 +1,7 @@
 function test_ft_read_and_plot_atlas
 
 % WALLTIME 00:15:00
-% MEM 3gb
+% MEM 8gb
 % DEPENDENCY ft_read_atlas ft_sourceplot
 
 % spm8 might have mexfile issues
@@ -141,13 +141,13 @@ end
 
 % the fieldtrip code should be able to read in all atlases without error
 ok = true;
-try
+%try
   for k = find(hastable)'
     fname = fullfile(f(k).folder, f(k).name);
     y{k} = ft_read_atlas(fname);
   end
-catch
-  ok = false;
-end
-assert(ok==1);
+%catch
+%  ok = false;
+%end
+%assert(ok==1);
 
