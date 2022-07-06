@@ -584,6 +584,16 @@ ARRAY+=(private/fitsphere.m)
 sync ${ARRAY[*]}
 
 ################################################################################
+# fixcoordsys.m
+
+ARRAY=()
+ARRAY+=(fileio/private/fixcoordsys.m)
+ARRAY+=(forward/private/fixcoordsys.m)
+ARRAY+=(plotting/private/fixcoordsys.m)
+ARRAY+=(utilities/fixcoordsys.m)
+sync ${ARRAY[*]}
+
+################################################################################
 # fixdimord.m
 
 ARRAY=()
@@ -1478,6 +1488,7 @@ ARRAY=()
 ARRAY+=(test/private/isalmostequal.m)
 ARRAY+=(private/isalmostequal.m)
 ARRAY+=(preproc/private/isalmostequal.m)
+ARRAY+=(specest/private/isalmostequal.m)
 sync ${ARRAY[*]}
 
 ################################################################################
@@ -1560,6 +1571,14 @@ sync ${ARRAY[*]}
 ARRAY=()
 ARRAY+=(fileio/private/jaga16_packet.m)
 ARRAY+=(realtime/example/private/jaga16_packet.m)
+sync ${ARRAY[*]}
+
+################################################################################
+# kaiserbeta.m
+
+ARRAY=()
+ARRAY+=(preproc/private/kaiserbeta.m)
+ARRAY+=(specest/private/kaiserbeta.m)
 sync ${ARRAY[*]}
 
 ################################################################################
